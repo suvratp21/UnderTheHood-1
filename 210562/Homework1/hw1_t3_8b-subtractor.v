@@ -32,8 +32,7 @@ wire [7:0] c;
 
     assign d = 1'b1;
     four_bit_subtr subtr1(a[3:0], b[3:0], d, r[3:0], c_out);
-    assign d = c[3];
-    four_bit_subtr subtr2(a[7:4], b[7:4], d, r[7:4], c_out );
+    four_bit_subtr subtr2(a[7:4], b[7:4], c[3], r[7:4], c_out );
     assign c_out = c[7];
 endmodule
 
