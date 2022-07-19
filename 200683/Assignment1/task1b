@@ -1,0 +1,71 @@
+module twoscomp(L,out5);
+input [7:0]L;
+output [7:0] out5;
+assign out5= ~L + 1'b1;
+endmodule
+module bitadd(input A,B,C,D,output out0);
+assign out0=((A)|(~B|D))&(B|~D);
+endmodule
+module threeadd(x,y,z,cout,out1,opcode);
+input [7:0] x,y,z;
+input [1:0]opcode;
+output cout;
+wire w1,w2,w3,w4,w5,w6,w7;
+output [7:0] out1;
+wire [7:0]Xn,Yn,Zn;
+twoscomp m1(x,Xn);
+twoscomp m2(y,Yn);
+twoscomp m3(z,Zn);
+reg [7:0]X,Y,Z;
+always@(opcode)
+begin
+if(opcode==2'b00)
+begin
+X=x;
+Y=y;
+Z=z;
+end
+else if(opcode==2'b01)
+begin
+X=Xn;
+Y=y;
+Z=z;
+end
+else if(opcode==2'b10)
+begin
+X=x;
+Y=Yn;
+Z=z;
+end
+else
+begin
+X=x;
+Y=y;
+Z=Zn;
+end
+end
+
+bitadd r1(X[0],Y[0],Z[0],1'b0,out1[0]);
+bitadd c1(1'b0,X[0],Y[0],Z[0],w1);
+
+bitadd r2(X[1],Y[1],Z[1],w1,out1[1]);
+bitadd c2(w1,X[1],Y[1],Z[1],w2);
+
+bitadd r3(X[2],Y[2],Z[2],w2,out1[2]);
+bitadd c3(w2,X[2],Y[2],Z[2],w3);
+
+bitadd r4(X[3],Y[3],Z[3],w3,out1[3]);
+bitadd c4(w3,X[3],Y[3],Z[3],w4);
+
+bitadd r5(X[4],Y[4],Z[4],w4,out1[4]);
+bitadd c5(w4,X[4],Y[4],Z[4],w5);
+
+bitadd r6(X[5],Y[5],Z[5],w5,out1[5]);
+bitadd c6(w5,X[5],Y[5],Z[5],w6);
+
+bitadd r7(X[6],Y[6],Z[6],w6,out1[6]);
+bitadd c7(w6,X[6],Y[6],Z[6],w7);
+
+bitadd r8(X[7],Y[7],Z[7],w7,out1[7]);
+bitadd c8(w7,X[7],Y[7],Z[7],cout);
+endmodule

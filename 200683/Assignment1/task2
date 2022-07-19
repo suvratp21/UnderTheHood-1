@@ -1,0 +1,84 @@
+module flipflop(a,b,q,clk);
+input a,b,clk;
+output reg q;
+reg curr,next;
+initial begin
+curr=0;q=0;
+end
+always @(posedge clk)
+begin
+q=curr;
+  curr=next;
+ $display("a = %b, b = %b, q = %b", a,b,q);
+end
+always @(negedge clk)
+begin
+if(a==0&&b==0)
+    begin
+        next=curr;
+      
+    end
+else if(a==0&&b==1)
+    begin
+        next=0;
+    
+    end
+else if(a==1&&b==0)
+    begin
+        next=~curr;
+     
+    end
+else
+    begin
+        next=1;
+ 
+    end
+   
+  
+end
+
+
+endmodule
+
+module tb;
+
+    reg a, b,clk;
+   wire s;
+
+    flipflop f(a, b, s, clk);
+
+
+    always begin
+  
+        clk = ~clk;
+           #(1);
+    end
+    initial begin
+        clk = 0;
+        a = 0;b=0;
+        // $monitor("a = %b, o = %b", a, o);
+        #2;
+        a = 1;b=0;
+        #2;
+        a = 0;b=1;
+        #2;
+        a = 1;b=0;
+        #2;
+        a = 1;b=1;
+        #2;
+        a = 0;b=0;
+        #2;
+        a = 1;b=1;
+        #2;
+        a = 1;b=0;
+        #2;
+        a = 1;b=1;
+        #2;
+        a = 0;b=1;
+        #2;
+        $finish;
+    end
+   
+
+
+endmodule

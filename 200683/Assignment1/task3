@@ -1,0 +1,107 @@
+module heater(clk,T,out);
+input clk;
+input [4:0]T;
+output reg [1:0]out;
+reg [1:0]curr,next;
+initial begin
+curr=2'b00;
+end
+always@(posedge clk)
+begin
+out=next;
+curr=out;
+
+
+
+$display(" T = %b, out = %b",  T, out);
+end
+always @(negedge clk)
+begin
+$display(" curr =%b", curr);
+if(curr==2'b10)
+    begin
+        if(T>20&&T<=26)
+        begin
+           next=2'b00;
+        end
+       else if(T>26)
+        begin
+            next=2'b01;
+        end
+        else begin
+       next=curr;
+         end
+    end
+else if(curr==2'b01)
+    begin
+      if(T<14&&T>=8)
+        begin
+            next=2'b00;
+        end
+    else if(T<8)
+        begin 
+             next=2'b10;
+        end
+         else begin
+       next=curr;
+         end
+    end    
+else if(curr==2'b00)
+    begin
+    if(T<12)
+        begin
+            next=2'b10;
+        end
+    else if(T>18)
+        begin
+            next=2'b01;
+        end
+    end
+         else begin
+       next=curr;
+         end
+end
+endmodule 
+module tb;
+   
+    reg [4:0]b;
+    reg  clk;
+    wire [1:0] s;
+
+    heater f( clk, b, s);
+
+
+    always begin
+     #5;
+        clk = ~clk;
+       
+    end
+
+ 
+
+    initial begin
+        clk = 0;
+   
+        b=0;
+        #10;
+        b=7;
+        #10;
+        b=31;
+        #10;
+        b=24;
+        #10;
+        b=1;
+        #10;
+        b=3;
+        #10;
+        b=30;
+        #10;
+        b=12;
+        #10;
+        b=29;
+        #10;
+        b=21;
+        #10;
+        $finish;
+    end
+endmodule
