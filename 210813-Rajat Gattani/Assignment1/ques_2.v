@@ -5,7 +5,7 @@ module SR_FF (
         q=0;
     end
     always @(posedge clk) begin
-        q <= s|(r&~q);
+        q=(~s&~r&q)|(s&~r&~q)|(s&r);
     end
 endmodule
 
