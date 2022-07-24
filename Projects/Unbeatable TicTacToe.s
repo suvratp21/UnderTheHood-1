@@ -68,11 +68,11 @@ invalid_input:
 valid_input:
 	#at this moment we have the user choice stored in $t0
 
-	addi $t9, $t9, 1	#increment no. of turns played count
-	beq $t9, 5, draw	#if 5 turns played by user, then its a draw (code ensured user doesn't win)
-
 	li $s0, 1			#updating the grid
 	sw $s0, grid($t2)
+
+	addi $t9, $t9, 1	#increment no. of turns played count
+	beq $t9, 5, print_grid	#if 5 turns played by user, then its a draw (code ensured user doesn't win)
 
 	li $t1, 10			#Updating the current state
 	mul $t8, $t8, $t1
@@ -1726,6 +1726,8 @@ print_space:
 	syscall
 	j print_element
 end_print:
+	beq $t9, 6, computer_won_cont
+	beq $t9, 5, draw
 	j ask_input
 
 #Exiting
@@ -1735,6 +1737,9 @@ draw:
     syscall
     j end
 computer_won:
+	li $t9, 6
+	j print_grid
+computer_won_cont:
 	li $v0, 4
     la $a0, won
     syscall
